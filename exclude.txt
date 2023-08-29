@@ -1,0 +1,14 @@
+.git
+.github
+.gitmodules
+.gitignore
+.gradle
+.idea
+CoreCanary
+chartboostcore/build/kotlin/
+chartboostcore/build/.transforms/
+*/build/tmp
+*/build/intermediates
+/build/dokka
+/scripts/
+chartboost-core-android-consent-adapter-usercentrics
