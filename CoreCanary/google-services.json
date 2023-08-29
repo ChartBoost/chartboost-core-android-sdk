@@ -1,0 +1,191 @@
+{
+  "project_info": {
+    "project_number": "983003802362",
+    "firebase_url": "https://helium-sdk-default-rtdb.firebaseio.com",
+    "project_id": "helium-sdk",
+    "storage_bucket": "helium-sdk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983003802362:android:337539465f05dfa2837743",
+        "android_client_info": {
+          "package_name": "com.chartboost.HeliumUnityCanary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBthIOsQ04gZtIIkgggNqbwQt77dYHsAxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "983003802362-1conuntjc27ao7qk6sq9smao8987paac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chartboost.zade-mobileads-demo-app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983003802362:android:1dd6e775f5759d25837743",
+        "android_client_info": {
+          "package_name": "com.chartboost.chartboostcore.canary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBthIOsQ04gZtIIkgggNqbwQt77dYHsAxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "983003802362-1conuntjc27ao7qk6sq9smao8987paac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chartboost.zade-mobileads-demo-app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983003802362:android:97dadda4cd1d8281837743",
+        "android_client_info": {
+          "package_name": "com.chartboost.core.canary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBthIOsQ04gZtIIkgggNqbwQt77dYHsAxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "983003802362-1conuntjc27ao7qk6sq9smao8987paac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chartboost.zade-mobileads-demo-app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983003802362:android:4e86515e9ef7f1d4837743",
+        "android_client_info": {
+          "package_name": "com.chartboost.heliumcanary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBthIOsQ04gZtIIkgggNqbwQt77dYHsAxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "983003802362-1conuntjc27ao7qk6sq9smao8987paac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chartboost.zade-mobileads-demo-app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983003802362:android:3f477aac7f9f650f837743",
+        "android_client_info": {
+          "package_name": "com.chartboost.zade_mobileads_demo_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBthIOsQ04gZtIIkgggNqbwQt77dYHsAxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983003802362-ddjpd2odbcmfnctlr1qq3dir9vq6ka9n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "983003802362-1conuntjc27ao7qk6sq9smao8987paac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chartboost.zade-mobileads-demo-app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

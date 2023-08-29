@@ -1,0 +1,3 @@
+[submodule "chartboost-core-android-consent-adapter-usercentrics"]
+	path = chartboost-core-android-consent-adapter-usercentrics
+	url = git@github.com:ChartBoost/chartboost-core-android-consent-adapter-usercentrics.git

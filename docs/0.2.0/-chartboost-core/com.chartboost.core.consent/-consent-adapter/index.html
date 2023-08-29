@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ConsentAdapter</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>ChartboostCore</span>
+            </a>
+    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":ChartboostCore:dokkaHtml/main">main</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="ChartboostCore::com.chartboost.core.consent/ConsentAdapter///PointingToDeclaration//249564439">
+  <div class="breadcrumbs"><a href="../../../index.html">ChartboostCore</a><span class="delimiter">/</span><a href="../index.html">com.chartboost.core.consent</a><span class="delimiter">/</span><span class="current">ConsentAdapter</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Consent</span><wbr></wbr><span><span>Adapter</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ChartboostCore:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">ConsentAdapter</a></div><p class="paragraph">The consent management platform adapter to communicate between Chartboost Core and the CMP.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="1481692041%2FFunctions%2F249564439" anchor-label="denyConsent" id="1481692041%2FFunctions%2F249564439" data-filterable-set=":ChartboostCore:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":ChartboostCore:dokkaHtml/main" data-filterable-set=":ChartboostCore:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="deny-consent.html"><span>deny</span><wbr></wbr><span><span>Consent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1481692041%2FFunctions%2F249564439"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ChartboostCore:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="deny-consent.html"><span class="token function">denyConsent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">statusSource<span class="token operator">: </span><a href="../-consent-status-source/index.html">ConsentStatusSource</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/index.html">Result</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Deny user consent without showing a dialog.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-909431651%2FFunctions%2F249564439" anchor-label="grantConsent" id="-909431651%2FFunctions%2F249564439" data-filterable-set=":ChartboostCore:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":ChartboostCore:dokkaHtml/main" data-filterable-set=":ChartboostCore:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grant-consent.html"><span>grant</span><wbr></wbr><span><span>Consent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-909431651%2FFunctions%2F249564439"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ChartboostCore:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="grant-consent.html"><span class="token function">grantConsent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">statusSource<span class="token operator">: </span><a href="../-consent-status-source/index.html">ConsentStatusSource</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/index.html">Result</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Grant user consent without showing a dialog.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1892286119%2FFunctions%2F249564439" anchor-label="resetConsent" id="1892286119%2FFunctions%2F249564439" data-filterable-set=":ChartboostCore:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":ChartboostCore:dokkaHtml/main" data-filterable-set=":ChartboostCore:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="reset-consent.html"><span>reset</span><wbr></wbr><span><span>Consent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1892286119%2FFunctions%2F249564439"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ChartboostCore:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="reset-consent.html"><span class="token function">resetConsent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/index.html">Result</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Reset user consent without showing a dialog. This usually also resets the underlying consent management platform and re-initializes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1623058365%2FFunctions%2F249564439" anchor-label="showConsentDialog" id="1623058365%2FFunctions%2F249564439" data-filterable-set=":ChartboostCore:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":ChartboostCore:dokkaHtml/main" data-filterable-set=":ChartboostCore:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="show-consent-dialog.html"><span>show</span><wbr></wbr><span>Consent</span><wbr></wbr><span><span>Dialog</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1623058365%2FFunctions%2F249564439"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ChartboostCore:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="show-consent-dialog.html"><span class="token function">showConsentDialog</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">activity<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/app/Activity.html">Activity</a><span class="token punctuation">, </span></span><span class="parameter ">dialogType<span class="token operator">: </span><a href="../-consent-dialog-type/index.html">ConsentDialogType</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/index.html">Result</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Show a consent dialog.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-2114876014%2FProperties%2F249564439" anchor-label="consents" id="-2114876014%2FProperties%2F249564439" data-filterable-set=":ChartboostCore:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":ChartboostCore:dokkaHtml/main" data-filterable-set=":ChartboostCore:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="consents.html"><span><span>consents</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2114876014%2FProperties%2F249564439"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ChartboostCore:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="consents.html">consents</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../index.html#968249890%2FClasslikes%2F249564439">ConsentStandard</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../index.html#153207954%2FClasslikes%2F249564439">ConsentValue</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Map of consent standards (eg. GDPR, USP, etc) to the consent value (eg. GRANTED, 1YN-, etc). See <a href="../-default-consent-standard/index.html">DefaultConsentStandard</a> and <a href="../-default-consent-value/index.html">DefaultConsentValue</a> for other common examples.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-338805245%2FProperties%2F249564439" anchor-label="consentStatus" id="-338805245%2FProperties%2F249564439" data-filterable-set=":ChartboostCore:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":ChartboostCore:dokkaHtml/main" data-filterable-set=":ChartboostCore:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="consent-status.html"><span>consent</span><wbr></wbr><span><span>Status</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-338805245%2FProperties%2F249564439"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ChartboostCore:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="consent-status.html">consentStatus</a><span class="token operator">: </span><a href="../-consent-status/index.html">ConsentStatus</a></div><div class="brief "><p class="paragraph">The overall consent status.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-922423081%2FProperties%2F249564439" anchor-label="listener" id="-922423081%2FProperties%2F249564439" data-filterable-set=":ChartboostCore:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":ChartboostCore:dokkaHtml/main" data-filterable-set=":ChartboostCore:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="listener.html"><span><span>listener</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-922423081%2FProperties%2F249564439"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ChartboostCore:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">var </span><a href="listener.html">listener</a><span class="token operator">: </span><a href="../-consent-adapter-listener/index.html">ConsentAdapterListener</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">If any consent standards or status changes happen, notify this listener.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="791673672%2FProperties%2F249564439" anchor-label="shouldCollectConsent" id="791673672%2FProperties%2F249564439" data-filterable-set=":ChartboostCore:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":ChartboostCore:dokkaHtml/main" data-filterable-set=":ChartboostCore:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="should-collect-consent.html"><span>should</span><wbr></wbr><span>Collect</span><wbr></wbr><span><span>Consent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="791673672%2FProperties%2F249564439"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ChartboostCore:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="should-collect-consent.html">shouldCollectConsent</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">This should tell the publisher whether or not to show a consent dialog.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
