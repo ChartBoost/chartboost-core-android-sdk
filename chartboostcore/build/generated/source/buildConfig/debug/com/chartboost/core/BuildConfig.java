@@ -8,5 +8,5 @@ public final class BuildConfig {
   public static final String LIBRARY_PACKAGE_NAME = "com.chartboost.core";
   public static final String BUILD_TYPE = "debug";
   // Field from default config.
-  public static final String CHARTBOOST_CORE_VERSION = "0.1.0";
+  public static final String CHARTBOOST_CORE_VERSION = "0.2.0";
 }

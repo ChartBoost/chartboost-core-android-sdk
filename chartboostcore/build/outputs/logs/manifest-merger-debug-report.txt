@@ -1,43 +1,43 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:9:1-20:12
-INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:9:1-20:12
-INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:9:1-20:12
+ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:9:1-20:12
+INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:9:1-20:12
+INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:9:1-20:12
 	package
-		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:10:5-34
-		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
-		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
+		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:10:5-34
+		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
+		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:9:11-69
+		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:9:11-69
 uses-permission#android.permission.INTERNET
-ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:12:5-67
+ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:12:5-67
 	android:name
-		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:12:22-64
+		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:12:22-64
 uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:13:5-79
+ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:13:5-79
 	android:name
-		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:13:22-76
+		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:13:22-76
 uses-permission#com.google.android.gms.permission.AD_ID
-ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:14:5-79
+ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:14:5-79
 	android:name
-		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:14:22-76
+		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:14:22-76
 application
-ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:16:5-18:38
+ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:16:5-18:38
 	android:supportsRtl
-		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:18:9-35
+		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:18:9-35
 	android:allowBackup
-		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml:17:9-35
+		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml:17:9-35
 uses-sdk
-INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
-INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
-INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
-INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
+INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
+INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
+INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
+INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
-		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
-		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
+		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
+		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
+		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
-		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
-		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk-private/ChartboostCore/src/main/AndroidManifest.xml
+		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
+		ADDED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
+		INJECTED from /Users/vu.chau/workspace/chartboost-core-android-sdk/ChartboostCore/src/main/AndroidManifest.xml
