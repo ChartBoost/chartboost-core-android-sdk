@@ -17,6 +17,7 @@ import com.chartboost.core.error.ChartboostCoreError
 import com.chartboost.core.error.ChartboostCoreException
 import com.chartboost.core.initialization.InitializableModule
 import com.chartboost.core.initialization.InitializableModuleObserver
+import com.chartboost.core.initialization.ModuleInitializationConfiguration
 import com.chartboost.core.initialization.ModuleInitializationResult
 import com.chartboost.core.initialization.ModuleInitializationStatus
 import com.chartboost.core.initialization.SdkConfiguration
@@ -35,7 +36,6 @@ import java.util.concurrent.atomic.AtomicReference
  */
 internal object ChartboostCoreInternal {
     var prefs: SharedPreferences? = null
-    val consent: ConsentManagementPlatform = ConsentManagementPlatform()
 
     /**
      * Map of module to its initialization status.
@@ -45,8 +45,8 @@ internal object ChartboostCoreInternal {
 
     internal val environment: Environment = Environment()
 
+    internal val consent: ConsentManagementPlatform = ConsentManagementPlatform()
     private val coreModuleMarker = ChartboostCoreModule()
-    private val consentObserver: ConsentObserver? = null
 
     /**
      * A set of predefined and essential modules to initialize in case the publisher does not provide any.
@@ -108,7 +108,7 @@ internal object ChartboostCoreInternal {
                     }
 
                     Utils.executeWithExponentialBackoff { retryCount ->
-                        val result = initializeModule(context, module, observer)
+                        val result = initializeModule(context, module, sdkConfiguration, observer)
 
                         // Only notify the observer of the module initialization result if the module initialization has succeeded or if it's the last retry attempt.
                         // This is to prevent the observer from being notified of a module initialization failure multiple times in case of retries.
@@ -137,11 +137,14 @@ internal object ChartboostCoreInternal {
     private suspend fun initializeModule(
         context: Context,
         module: InitializableModule,
+        sdkConfiguration: SdkConfiguration,
         observer: InitializableModuleObserver?,
     ): Result<Unit> {
         val moduleStatus = moduleInitializationStatuses[module.moduleId]?.get()
+        val moduleInitializationConfiguration =
+            createModuleInitializationConfiguration(sdkConfiguration)
 
-        ChartboostCoreLogger.d("Initializing module ${module.moduleId}")
+        ChartboostCoreLogger.d("Initializing module ${module.moduleId} with config: $moduleInitializationConfiguration")
         ResultManager.start(module)
 
         if (moduleStatus == ModuleInitializationStatus.INITIALIZING) {
@@ -175,6 +178,7 @@ internal object ChartboostCoreInternal {
         val result = try {
             module.initialize(
                 context,
+                moduleInitializationConfiguration,
                 // TODO: Pipe actual config JSON from end users and/or backend here.
             )
         } catch (e: Exception) {
@@ -217,6 +221,16 @@ internal object ChartboostCoreInternal {
 
         return result
     }
+
+    /**
+     * Creates a [ModuleInitializationConfiguration] object from the [SdkConfiguration] object.
+     *
+     * @param sdkConfiguration The [SdkConfiguration] object to use for creating the [ModuleInitializationConfiguration] object.
+     */
+    private fun createModuleInitializationConfiguration(sdkConfiguration: SdkConfiguration) =
+        ModuleInitializationConfiguration(
+            chartboostApplicationIdentifier = sdkConfiguration.chartboostApplicationIdentifier
+        )
 }
 
 /**
@@ -230,6 +244,7 @@ internal class ChartboostCoreModule(
 
     override suspend fun initialize(
         context: Context,
+        moduleInitializationConfiguration: ModuleInitializationConfiguration,
     ): Result<Unit> {
         return Result.success(Unit)
     }
