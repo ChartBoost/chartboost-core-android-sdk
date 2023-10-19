@@ -1,1 +1,0 @@
-sourceset_dependencies='{":ChartboostCore:dokkaHtml/androidTestRelease":[],":ChartboostCore:dokkaHtml/debug":[],":ChartboostCore:dokkaHtml/main":[],":ChartboostCore:dokkaHtml/release":[],":ChartboostCore:dokkaHtml/testFixtures":[],":ChartboostCore:dokkaHtml/testFixturesDebug":[],":ChartboostCore:dokkaHtml/testFixturesRelease":[]}'
