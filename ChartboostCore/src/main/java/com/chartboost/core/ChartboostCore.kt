@@ -37,20 +37,7 @@ object ChartboostCore {
      * Flag to enable debug mode for Chartboost Core. This will enable verbose logs for the SDK.
      */
     @JvmStatic
-    var debug: Boolean = true
-        get() = ChartboostCoreInternal.prefs?.getBoolean("debugModeEnabled", true) ?: field
-        set(value) {
-            // Setting the value of the field before the prefs are initialized so that debug mode
-            // can be enabled/disabled before the SDK is initialized. Note that this will not
-            // persist the value of the field across sessions.
-            field = value
-
-            ChartboostCoreInternal.prefs?.edit()?.putBoolean("debugModeEnabled", value)?.commit()
-                ?: ChartboostCoreLogger.i(
-                    "Debug mode has been set to $value for the current session. " +
-                            "To persist this setting, ChartboostCore.initializeSdk() must be called."
-                )
-        }
+    var debug: Boolean = false
 
     @JvmStatic
     val publisherMetadata: PublisherMetadata = PublisherMetadata()

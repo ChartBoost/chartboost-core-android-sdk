@@ -75,48 +75,6 @@ class ChartboostCoreTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `debug mode is enabled successfully`(): Unit = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val sdkConfiguration = mockk<SdkConfiguration>()
-        val module = TestModule("test_module")
-
-        val observer = mockk<InitializableModuleObserver>()
-        val slot = slot<ModuleInitializationResult>()
-
-        every { observer.onModuleInitializationCompleted(capture(slot)) } just Runs
-
-        ChartboostCore.initializeSdk(context, sdkConfiguration, listOf(module), observer)
-        ChartboostCore.debug = true
-
-        assertEquals(
-            true,
-            ChartboostCoreInternal.prefs?.getBoolean("debugModeEnabled", false) ?: false
-        )
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `debug mode is disabled successfully`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val sdkConfiguration = mockk<SdkConfiguration>()
-        val module = TestModule("test_module")
-
-        val observer = mockk<InitializableModuleObserver>()
-        val slot = slot<ModuleInitializationResult>()
-
-        every { observer.onModuleInitializationCompleted(capture(slot)) } just Runs
-
-        ChartboostCore.initializeSdk(context, sdkConfiguration, listOf(module), observer)
-        ChartboostCore.debug = false
-
-        assertEquals(
-            false,
-            ChartboostCoreInternal.prefs?.getBoolean("debugModeEnabled", false) ?: true
-        )
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
     fun `initializing n modules once should call onModuleInitializationCompleted n times`() =
         runTest {
             val randomNum = (1..10).random()

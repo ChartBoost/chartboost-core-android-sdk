@@ -1,4 +1,4 @@
-# chartboost-core-android-sdk
+# chartboost-core-android-sdk-1
 
 ![badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fchartboost.s3.amazonaws.com%2Fchartboost-core%2Fsdk%2Fandroid%2Fcode-coverage%2Fcoverage-percent.json)
 
