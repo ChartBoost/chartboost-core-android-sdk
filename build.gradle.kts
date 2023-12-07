@@ -70,7 +70,7 @@ allprojects {
 }
 
 val chartboostCoreVersion: String by extra {
-    System.getenv("CHARTBOOST_CORE_VERSION")?.takeIf { it.isNotBlank() }  ?: "0.3.0"
+    System.getenv("CHARTBOOST_CORE_VERSION")?.takeIf { it.isNotBlank() }  ?: "0.4.0"
 }
 
 project(":ChartboostCore") {

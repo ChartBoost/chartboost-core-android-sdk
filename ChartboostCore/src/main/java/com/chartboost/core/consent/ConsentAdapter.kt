@@ -32,6 +32,11 @@ interface ConsentAdapter {
     val consentStatus: ConsentStatus
 
     /**
+     * A map of partner IDs to their respective consent status.
+     */
+    val partnerConsentStatus: Map<String, ConsentStatus>
+
+    /**
      * If any consent standards or status changes happen, notify this listener.
      */
     var listener: ConsentAdapterListener?

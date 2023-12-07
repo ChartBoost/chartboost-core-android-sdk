@@ -13,6 +13,7 @@ import com.chartboost.core.consent.ConsentAdapter
 import com.chartboost.core.consent.ConsentManagementPlatform
 import com.chartboost.core.consent.ConsentObserver
 import com.chartboost.core.environment.Environment
+import com.chartboost.core.environment.PublisherMetadataObserver
 import com.chartboost.core.error.ChartboostCoreError
 import com.chartboost.core.error.ChartboostCoreException
 import com.chartboost.core.initialization.InitializableModule
@@ -212,6 +213,12 @@ internal object ChartboostCoreInternal {
             // If the adapter is a CMP, set it as the underlying CMP.
             if (module is ConsentAdapter) {
                 consent.attachAdapter(module)
+            }
+
+            // If a module is a PublisherMetadataObserver, automatically add it as an observer for
+            // publisher metadata changes.
+            if (module is PublisherMetadataObserver) {
+                ChartboostCore.publisherMetadata.addObserver(module)
             }
 
             Utils.safeExecute {

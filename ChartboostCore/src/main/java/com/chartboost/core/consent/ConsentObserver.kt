@@ -13,22 +13,31 @@ package com.chartboost.core.consent
  */
 interface ConsentObserver {
     /**
-     * Fired when the Consent Management Platform adapter is attached and ready to be used.
+     * Called when the Consent Management Platform adapter is attached and ready to be used.
      */
     fun onConsentModuleReady()
 
     /**
-     * Fired when the consent status changes.
+     * Called when the consent status changes.
      *
      * @param status The new consent status.
      */
     fun onConsentStatusChange(status: ConsentStatus)
 
     /**
-     * Fired when any consent standard changes.
+     * Called when any consent standard changes.
      *
      * @param standard The consent standard. See [DefaultConsentStandard] for some defaults.
      * @param value The consent value. See [DefaultConsentValue] for some defaults. This can be null.
      */
     fun onConsentChangeForStandard(standard: ConsentStandard, value: ConsentValue?)
+
+    /**
+     * Called when a partner's consent status changes. See the Chartboost documentation for a
+     * list of partner IDs.
+     *
+     * @param partnerId The partner ID.
+     * @param status The new consent status.
+     */
+    fun onPartnerConsentStatusChange(partnerId: String, status: ConsentStatus)
 }
