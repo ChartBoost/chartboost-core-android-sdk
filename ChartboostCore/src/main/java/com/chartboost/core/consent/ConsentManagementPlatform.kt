@@ -42,6 +42,13 @@ class ConsentManagementPlatform {
         get() = adapter?.consentStatus ?: field
         private set
 
+    /**
+     * A map of partner IDs to their respective consent status.
+     */
+    var partnerConsentStatus: Map<String, ConsentStatus> = emptyMap()
+        get() = adapter?.partnerConsentStatus ?: field
+        private set
+
     private val observers: MutableSet<ConsentObserver> = mutableSetOf()
     private var adapter: ConsentAdapter? = null
 
@@ -148,6 +155,17 @@ class ConsentManagementPlatform {
                     Utils.safeExecute {
                         observers.forEach {
                             it.onConsentChangeForStandard(standard, value)
+                        }
+                    }
+                }
+
+                override fun onPartnerConsentStatusChange(
+                    partnerId: String,
+                    status: ConsentStatus
+                ) {
+                    Utils.safeExecute {
+                        observers.forEach {
+                            it.onPartnerConsentStatusChange(partnerId, status)
                         }
                     }
                 }
