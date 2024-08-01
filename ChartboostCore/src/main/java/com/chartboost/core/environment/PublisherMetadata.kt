@@ -1,6 +1,6 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
@@ -8,20 +8,12 @@
 package com.chartboost.core.environment
 
 import com.chartboost.core.ChartboostCoreInternal
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
- * Use this class to set metadata around the user, session, and environment. These values are not
- * persisted between app launches.
+ * Use this class to set environment properties regarding the user, session, and framework.
+ * These values are not persisted between app launches.
  */
 class PublisherMetadata() {
-    /**
-     * The list of observers to notify when a property changes.
-     */
-    private val observers = mutableListOf<PublisherMetadataObserver>()
-
     /**
      * Set if this user is underage for COPPA.
      *
@@ -29,45 +21,38 @@ class PublisherMetadata() {
      */
     fun setIsUserUnderage(userUnderage: Boolean) {
         ChartboostCoreInternal.environment.isUserUnderage = userUnderage
-        notifyObservers(PublisherMetadataChangedProperty.IS_USER_UNDERAGE)
     }
 
     /**
-     * Set the optional session identifier.
+     * Set the optional publisher-specified session identifier.
      *
      * @param publisherSessionIdentifier The session identifier.
      */
     fun setPublisherSessionIdentifier(publisherSessionIdentifier: String?) {
         ChartboostCoreInternal.environment.publisherSessionIdentifier = publisherSessionIdentifier
-        notifyObservers(PublisherMetadataChangedProperty.PUBLISHER_SESSION_IDENTIFIER)
     }
 
     /**
-     * Set the optional app identifier.
+     * Set the optional publisher-specified app identifier.
      *
      * @param publisherAppIdentifier The app identifier.
      */
     fun setPublisherAppIdentifier(publisherAppIdentifier: String?) {
         ChartboostCoreInternal.environment.publisherAppIdentifier = publisherAppIdentifier
-        notifyObservers(PublisherMetadataChangedProperty.PUBLISHER_APP_IDENTIFIER)
     }
 
     /**
-     * Set the framework from which this library is used, eg. Unity.
+     * Set the framework name and version from which this library is used, eg. Unity.
      *
      * @param frameworkName The name of the framework.
+     * @param frameworkVersion The version of the framework.
      */
-    fun setFrameworkName(frameworkName: String?) {
+    fun setFramework(
+        frameworkName: String?,
+        frameworkVersion: String?,
+    ) {
         ChartboostCoreInternal.environment.frameworkName = frameworkName
-        notifyObservers(PublisherMetadataChangedProperty.FRAMEWORK_NAME)
-    }
-
-    /**
-     * Set the version of the framework from which this library is used, eg. 2023.1.5.
-     */
-    fun setFrameworkVersion(frameworkVersion: String?) {
         ChartboostCoreInternal.environment.frameworkVersion = frameworkVersion
-        notifyObservers(PublisherMetadataChangedProperty.FRAMEWORK_VERSION)
     }
 
     /**
@@ -77,49 +62,17 @@ class PublisherMetadata() {
      */
     fun setPlayerIdentifier(playerIdentifier: String?) {
         ChartboostCoreInternal.environment.playerIdentifier = playerIdentifier
-        notifyObservers(PublisherMetadataChangedProperty.PLAYER_IDENTIFIER)
-    }
-
-    /**
-     * Add an observer to be notified when a property changes.
-     */
-    fun addObserver(observer: PublisherMetadataObserver) {
-        CoroutineScope(Dispatchers.Main.immediate).launch {
-            observers.add(observer)
-        }
-    }
-
-    /**
-     * Remove an observer from being notified when a property changes.
-     */
-    fun removeObserver(observer: PublisherMetadataObserver) {
-        CoroutineScope(Dispatchers.Main.immediate).launch {
-            observers.remove(observer)
-        }
-    }
-
-    /**
-     * Notify all observers that a property has changed.
-     *
-     * @param property The property that changed.
-     */
-    private fun notifyObservers(property: PublisherMetadataChangedProperty) {
-        CoroutineScope(Dispatchers.Main.immediate).launch {
-            observers.forEach {
-                it.onChanged(property)
-            }
-        }
     }
 }
 
 /**
  * Type-safe representation of the changed property. This is used to avoid passing strings around.
  */
-enum class PublisherMetadataChangedProperty(val value: String) {
+enum class ObservableEnvironmentProperty(val value: String) {
     IS_USER_UNDERAGE("isUserUnderage"),
-    PUBLISHER_SESSION_IDENTIFIER("publisherSessionID"),
-    PUBLISHER_APP_IDENTIFIER("publisherAppID"),
+    PUBLISHER_SESSION_IDENTIFIER("publisherSessionIdentifier"),
+    PUBLISHER_APP_IDENTIFIER("publisherAppIdentifier"),
     FRAMEWORK_NAME("frameworkName"),
     FRAMEWORK_VERSION("frameworkVersion"),
-    PLAYER_IDENTIFIER("playerID")
+    PLAYER_IDENTIFIER("playerIdentifier"),
 }

@@ -1,11 +1,13 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
 
 package com.chartboost.core.consent
+
+import android.content.Context
 
 /**
  * Modules that implement this interface are automatically subscribed to consent updates. Use this
@@ -14,30 +16,27 @@ package com.chartboost.core.consent
 interface ConsentObserver {
     /**
      * Called when the Consent Management Platform adapter is attached and ready to be used.
-     */
-    fun onConsentModuleReady()
-
-    /**
-     * Called when the consent status changes.
      *
-     * @param status The new consent status.
+     * @param appContext The application context.
+     * @param initialConsents All of the consents available when the module is ready.
+     * See [ConsentKeys] and [ConsentValues] for some defaults.
      */
-    fun onConsentStatusChange(status: ConsentStatus)
+    fun onConsentModuleReady(
+        appContext: Context,
+        initialConsents: Map<ConsentKey, ConsentValue>,
+    )
 
     /**
      * Called when any consent standard changes.
      *
-     * @param standard The consent standard. See [DefaultConsentStandard] for some defaults.
-     * @param value The consent value. See [DefaultConsentValue] for some defaults. This can be null.
+     * @param appContext The application context.
+     * @param fullConsents All of the consents. If a key is present but there is no value, the value
+     *                     has been removed. See [DefaultConsentKey] and [DefaultConsentValue] for some defaults.
+     * @param modifiedKeys The set of consents that have changed. See [ConsentKeys] for some defaults.
      */
-    fun onConsentChangeForStandard(standard: ConsentStandard, value: ConsentValue?)
-
-    /**
-     * Called when a partner's consent status changes. See the Chartboost documentation for a
-     * list of partner IDs.
-     *
-     * @param partnerId The partner ID.
-     * @param status The new consent status.
-     */
-    fun onPartnerConsentStatusChange(partnerId: String, status: ConsentStatus)
+    fun onConsentChange(
+        appContext: Context,
+        fullConsents: Map<ConsentKey, ConsentValue>,
+        modifiedKeys: Set<ConsentKey>,
+    )
 }

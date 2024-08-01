@@ -1,6 +1,6 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
@@ -29,8 +29,7 @@ open class ChartboostCoreResult(
     /**
      * Returns a string representation of the result
      */
-    override fun toString() =
-        "ChartboostCoreResult(start=$start, end=$end, duration=$duration, exception=${exception?.message})"
+    override fun toString() = "ChartboostCoreResult(start=$start, end=$end, duration=$duration, exception=${exception?.message})"
 
     /**
      * Returns a JSON representation of the result

@@ -1,6 +1,6 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
@@ -15,12 +15,42 @@ import com.chartboost.core.error.ChartboostCoreError
 import com.chartboost.core.error.ChartboostCoreException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Collections
 
-typealias ConsentStandard = String
+/**
+ * ConsentKey is just a marker to say the intended keys for this are very specific IAB strings.
+ */
+typealias ConsentKey = String
+
+/**
+ * ConsentValue is a marker to say that this String is actually some kind of consent data.
+ */
 typealias ConsentValue = String
 
+/**
+ * Handles consent for all modules and for the publisher.
+ */
 class ConsentManagementPlatform {
+    companion object {
+        /**
+         * The default amount of time to wait to send consent updates to debounce consent changes.
+         */
+        const val DEFAULT_CONSENT_UPDATE_BATCH_DELAY_MS = 500L
+
+        /**
+         * Convenience method to check US privacy consent based on the USP String.
+         *
+         * @param uspString The US Privacy String
+         * @return True if consent is given, false otherwise
+         */
+        fun getUspConsentFromUspString(uspString: String?): Boolean {
+            return uspString?.getOrNull(2) == 'N'
+        }
+    }
+
     /**
      * Whether or not it is appropriate to show a consent dialog.
      */
@@ -31,25 +61,24 @@ class ConsentManagementPlatform {
     /**
      * A collection of consent standards (eg. CCPA) and values (eg. 1YN-).
      */
-    var consents: Map<ConsentStandard, ConsentValue> = mutableMapOf()
-        get() = adapter?.consents ?: field
+    var consents: Map<ConsentKey, ConsentValue> = mutableMapOf()
+        get() = (adapter?.consents ?: field).toMap()
         private set
 
     /**
-     * The current consent status of the user.
+     * How many milliseconds to wait when batching consent updates.
+     * Default is [DEFAULT_CONSENT_UPDATE_BATCH_DELAY_MS].
      */
-    var consentStatus: ConsentStatus = ConsentStatus.UNKNOWN
-        get() = adapter?.consentStatus ?: field
-        private set
+    var consentUpdateBatchDelayMs = DEFAULT_CONSENT_UPDATE_BATCH_DELAY_MS
 
     /**
-     * A map of partner IDs to their respective consent status.
+     * Consent updates these observers.
      */
-    var partnerConsentStatus: Map<String, ConsentStatus> = emptyMap()
-        get() = adapter?.partnerConsentStatus ?: field
-        private set
-
     private val observers: MutableSet<ConsentObserver> = mutableSetOf()
+
+    /**
+     * The adapter class for the actual underlying consent sdk.
+     */
     private var adapter: ConsentAdapter? = null
 
     /**
@@ -58,7 +87,10 @@ class ConsentManagementPlatform {
      * @param activity The activity to attach the consent dialog.
      * @param dialogType The type of dialog to show.
      */
-    suspend fun showConsentDialog(activity: Activity, dialogType: ConsentDialogType): Result<Unit> {
+    suspend fun showConsentDialog(
+        activity: Activity,
+        dialogType: ConsentDialogType,
+    ): Result<Unit> {
         ChartboostCoreLogger.d("Showing consent dialog.")
         return adapter?.showConsentDialog(activity, dialogType) ?: run {
             ChartboostCoreLogger.e("No adapter. Cannot show consent dialog.")
@@ -75,7 +107,10 @@ class ConsentManagementPlatform {
      * @param statusSource How this consent status was retrieved.
      * @return Whether or not the operation succeeded
      */
-    suspend fun grantConsent(context: Context, statusSource: ConsentStatusSource): Result<Unit> {
+    suspend fun grantConsent(
+        context: Context,
+        statusSource: ConsentSource,
+    ): Result<Unit> {
         ChartboostCoreLogger.d("Attempting to grant consent.")
         return adapter?.grantConsent(context, statusSource) ?: run {
             ChartboostCoreLogger.e("No CMP adapter to grant consent.")
@@ -90,7 +125,10 @@ class ConsentManagementPlatform {
      * @param statusSource How this consent status was retrieved.
      * @return Whether or not the operation succeeded
      */
-    suspend fun denyConsent(context: Context, statusSource: ConsentStatusSource): Result<Unit> {
+    suspend fun denyConsent(
+        context: Context,
+        statusSource: ConsentSource,
+    ): Result<Unit> {
         ChartboostCoreLogger.d("Attempting to deny consent.")
         return adapter?.denyConsent(context, statusSource) ?: run {
             ChartboostCoreLogger.e("No CMP adapter to deny consent.")
@@ -134,51 +172,66 @@ class ConsentManagementPlatform {
         }
     }
 
-    internal fun attachAdapter(consentAdapter: ConsentAdapter) {
+    /**
+     * Attaches an adapter to the consent management platform.
+     *
+     * @param appContext The application context.
+     * @param consentAdapter The Consent adapter.
+     */
+    internal fun attachAdapter(
+        appContext: Context,
+        consentAdapter: ConsentAdapter,
+    ) {
         if (adapter != null) {
             ChartboostCoreLogger.d("Ignoring multiple consent adapter attach requests.")
             return
         }
-        adapter = consentAdapter.apply {
-            listener = object : ConsentAdapterListener {
-                override fun onConsentStatusChange(status: ConsentStatus) {
-                    Utils.safeExecute {
-                        observers.forEach {
-                            it.onConsentStatusChange(status)
-                        }
-                    }
-                }
-
-                override fun onConsentChangeForStandard(
-                    standard: ConsentStandard, value: ConsentValue?
-                ) {
-                    Utils.safeExecute {
-                        observers.forEach {
-                            it.onConsentChangeForStandard(standard, value)
-                        }
-                    }
-                }
-
-                override fun onPartnerConsentStatusChange(
-                    partnerId: String,
-                    status: ConsentStatus
-                ) {
-                    Utils.safeExecute {
-                        observers.forEach {
-                            it.onPartnerConsentStatusChange(partnerId, status)
-                        }
-                    }
-                }
+        adapter =
+            consentAdapter.apply {
+                listener = DebouncingConsentAdapterListener(appContext, this@ConsentManagementPlatform)
             }
-        }
         Utils.safeExecute {
             observers.forEach {
-                it.onConsentModuleReady()
+                it.onConsentModuleReady(appContext, consents)
             }
         }
     }
 
+    /**
+     * Whether or not there already is an adapter attached.
+     */
     internal fun isAdapterAttached(): Boolean {
         return adapter != null
+    }
+
+    /**
+     * This class automatically gathers consent changes and emits the onConsentChange callback
+     * after [consentUpdateBatchDelayMs] so consent changes comes all at once.
+     */
+    class DebouncingConsentAdapterListener(
+        private val appContext: Context,
+        private val consentManagementPlatform: ConsentManagementPlatform,
+    ) :
+        ConsentAdapterListener {
+        private val changedConsents: MutableSet<ConsentKey> =
+            Collections.synchronizedSet(mutableSetOf())
+        private var consentChangeJob: Job? = null
+
+        override fun onConsentChange(consentKey: ConsentKey) {
+            changedConsents.add(consentKey)
+            if (consentChangeJob == null) {
+                consentChangeJob =
+                    CoroutineScope(Main).launch {
+                        delay(consentManagementPlatform.consentUpdateBatchDelayMs)
+                        Utils.safeExecute {
+                            consentManagementPlatform.observers.forEach {
+                                it.onConsentChange(appContext, consentManagementPlatform.consents, changedConsents.toSet())
+                            }
+                            changedConsents.clear()
+                            consentChangeJob = null
+                        }
+                    }
+            }
+        }
     }
 }

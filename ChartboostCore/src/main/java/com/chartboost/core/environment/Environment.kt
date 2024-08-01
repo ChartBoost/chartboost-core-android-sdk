@@ -1,6 +1,6 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
@@ -25,51 +25,58 @@ import com.chartboost.core.Utils
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.appset.AppSet
 import com.google.android.gms.appset.AppSetIdInfo
-import com.google.android.gms.tasks.Task
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.tasks.Tasks
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import java.lang.Double.max
 import java.util.*
-import kotlin.coroutines.resumeWithException
 
-internal class Environment() : BaseEnvironment,
-    AdvertisingEnvironment, AnalyticsEnvironment,
+internal class Environment() :
+    BaseEnvironment,
+    AdvertisingEnvironment,
+    AnalyticsEnvironment,
     AttributionEnvironment {
-
     private var sessionStartTimeMillis: Long? = null
     private var appContext: Context? = null
+
+    /**
+     * The list of observers to notify when a [ObservableEnvironmentProperty] changes.
+     */
+    private val observers = mutableListOf<EnvironmentObserver>()
 
     suspend fun startSession(context: Context) {
         appContext = context
         if (sessionStartTimeMillis == null) {
             sessionStartTimeMillis = SystemClock.uptimeMillis()
             appSessionIdentifier = UUID.randomUUID().toString()
+            Utils.safeExecute {
+                fetchAndReturnUserAgent()
+            }
+            updateAppSetId(context)
         }
-
-        Utils.safeExecute {
-            fetchAndReturnUserAgent()
-        }
-
-        updateAppSetId(context)
     }
 
+    /**
+     * Resets the session start time and restarts the session.
+     */
     suspend fun restartSession(context: Context) {
         sessionStartTimeMillis = null
         startSession(context)
     }
 
     override val appSessionDurationSeconds: Double
-        get() = sessionStartTimeMillis?.let {
-            ((SystemClock.uptimeMillis() - it) / 1000.0)
-        } ?: 0.0
+        get() =
+            sessionStartTimeMillis?.let {
+                ((SystemClock.uptimeMillis() - it) / 1000.0)
+            } ?: 0.0
 
     override var appSessionIdentifier: String? = null
         private set
 
     override var appVersion: String? = null
         get() {
-            // Get the HeliumSdk context.
             appContext?.let { context ->
                 try {
                     // If we have a context, let's grab the package info from the package manager to grab the version.
@@ -82,7 +89,7 @@ internal class Environment() : BaseEnvironment,
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 packageManager.getPackageInfo(
                                     packageName,
-                                    PackageManager.PackageInfoFlags.of(0)
+                                    PackageManager.PackageInfoFlags.of(0),
                                 )
                             } else {
                                 packageManager.getPackageInfo(packageName, 0)
@@ -94,7 +101,6 @@ internal class Environment() : BaseEnvironment,
                         }
                     }
                 } catch (nameNotFoundException: PackageManager.NameNotFoundException) {
-                    // If an error is found, let's log it.
                     ChartboostCoreLogger.e("Exception raised while retrieving appVersionName: ${nameNotFoundException.message}")
                 }
             }
@@ -103,13 +109,22 @@ internal class Environment() : BaseEnvironment,
         private set
 
     override var frameworkName: String? = null
-        internal set
+        internal set(value) {
+            field = value
+            notifyObservers(ObservableEnvironmentProperty.FRAMEWORK_NAME)
+        }
 
     override var frameworkVersion: String? = null
-        internal set
+        internal set(value) {
+            field = value
+            notifyObservers(ObservableEnvironmentProperty.FRAMEWORK_VERSION)
+        }
 
     override var isUserUnderage: Boolean = false
-        internal set
+        internal set(value) {
+            field = value
+            notifyObservers(ObservableEnvironmentProperty.IS_USER_UNDERAGE)
+        }
 
     override val networkConnectionType: NetworkConnectionType
         @SuppressLint("MissingPermission")
@@ -155,25 +170,26 @@ internal class Environment() : BaseEnvironment,
                 try {
                     if (ActivityCompat.checkSelfPermission(
                             context,
-                            Manifest.permission.READ_PHONE_STATE
+                            Manifest.permission.READ_PHONE_STATE,
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
-                        val telephonyManager = context
-                            .getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+                        val telephonyManager =
+                            context
+                                .getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
 
                         telephonyManager?.let {
-                            networkType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                it.dataNetworkType
-                            } else {
-                                it.networkType
-                            }
+                            networkType =
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    it.dataNetworkType
+                                } else {
+                                    it.networkType
+                                }
                         }
                     }
                 } catch (securityException: SecurityException) {
                     // let networkType stay 0
                 }
             }
-
 
             return when (networkType) {
                 // WIFI
@@ -209,13 +225,22 @@ internal class Environment() : BaseEnvironment,
         }
 
     override var playerIdentifier: String? = null
-        internal set
+        internal set(value) {
+            field = value
+            notifyObservers(ObservableEnvironmentProperty.PLAYER_IDENTIFIER)
+        }
 
     override var publisherAppIdentifier: String? = null
-        internal set
+        internal set(value) {
+            field = value
+            notifyObservers(ObservableEnvironmentProperty.PUBLISHER_APP_IDENTIFIER)
+        }
 
     override var publisherSessionIdentifier: String? = null
-        internal set
+        internal set(value) {
+            field = value
+            notifyObservers(ObservableEnvironmentProperty.PUBLISHER_SESSION_IDENTIFIER)
+        }
 
     override val bundleIdentifier: String?
         get() = appContext?.packageName
@@ -234,17 +259,28 @@ internal class Environment() : BaseEnvironment,
     override val osVersion: String
         get() = Build.VERSION.RELEASE
 
-    override val screenHeight: Int?
+    override val screenHeightPixels: Int?
         get() = appContext?.resources?.displayMetrics?.heightPixels
 
     override val screenScale: Float?
         get() = appContext?.resources?.displayMetrics?.density
 
-    override val screenWidth: Int?
+    override val screenWidthPixels: Int?
         get() = appContext?.resources?.displayMetrics?.widthPixels
 
+    /**
+     * Local copy of the user agent so Environment doesn't have to fetch it repeatedly.
+     */
     private var userAgent: String? = null
+
+    /**
+     * Local copy of the vendor identifier.
+     */
     private var vendorIdentifier: String? = null
+
+    /**
+     * The vendor identifier scope. This defaults to `UNKNOWN` until it is set.
+     */
     private var vendorIdentifierScope: VendorIdScope = VendorIdScope.UNKNOWN
 
     override val volume: Double?
@@ -252,9 +288,12 @@ internal class Environment() : BaseEnvironment,
             val audioManager: AudioManager =
                 appContext?.getSystemService(Context.AUDIO_SERVICE) as? AudioManager ?: return null
             val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toDouble()
-            val minVolume = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                audioManager.getStreamMinVolume(AudioManager.STREAM_MUSIC).toDouble()
-            } else 0.0
+            val minVolume =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    audioManager.getStreamMinVolume(AudioManager.STREAM_MUSIC).toDouble()
+                } else {
+                    0.0
+                }
             val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toDouble()
             if (maxVolume - minVolume == 0.0) {
                 return null
@@ -266,8 +305,7 @@ internal class Environment() : BaseEnvironment,
             return max((currentVolume - minVolume) / (maxVolume - minVolume), 0.0)
         }
 
-    override suspend fun getAdvertisingIdentifier(): String? =
-        advertisingIdClient()?.id ?: advertisingIdNonGooglePlay()?.id
+    override suspend fun getAdvertisingIdentifier(): String? = advertisingIdClient()?.id ?: advertisingIdNonGooglePlay()?.id
 
     override suspend fun getLimitAdTrackingEnabled(): Boolean? =
         advertisingIdClient()?.isLimitAdTrackingEnabled
@@ -294,6 +332,37 @@ internal class Environment() : BaseEnvironment,
     }
 
     /**
+     * Add an observer to be notified when a property changes.
+     */
+    override fun addObserver(observer: EnvironmentObserver) {
+        CoroutineScope(Main.immediate).launch {
+            observers.add(observer)
+        }
+    }
+
+    /**
+     * Remove an observer from being notified when a property changes.
+     */
+    override fun removeObserver(observer: EnvironmentObserver) {
+        CoroutineScope(Main.immediate).launch {
+            observers.remove(observer)
+        }
+    }
+
+    /**
+     * Notify all observers that a property has changed.
+     *
+     * @param property The property that changed.
+     */
+    private fun notifyObservers(property: ObservableEnvironmentProperty) {
+        CoroutineScope(Dispatchers.Main.immediate).launch {
+            observers.forEach {
+                it.onChanged(property)
+            }
+        }
+    }
+
+    /**
      * Fetch and return the user agent. Call this only on the Main thread after Environment has
      * been initialized.
      */
@@ -316,38 +385,32 @@ internal class Environment() : BaseEnvironment,
         return localUserAgent
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private suspend fun <T> Task<T>.await(): T {
-        return suspendCancellableCoroutine { continuation ->
-            addOnSuccessListener { result ->
-                continuation.resume(result, null)
-            }
-            addOnFailureListener { exception ->
-                continuation.resumeWithException(exception)
+    private suspend fun updateAppSetId(appContext: Context) =
+        withContext(IO) {
+            try {
+                val task = Tasks.await(AppSet.getClient(appContext).appSetIdInfo)
+                vendorIdentifierScope =
+                    when (task.scope) {
+                        AppSetIdInfo.SCOPE_DEVELOPER -> VendorIdScope.DEVELOPER
+                        AppSetIdInfo.SCOPE_APP -> VendorIdScope.APPLICATION
+                        else -> VendorIdScope.UNKNOWN
+                    }
+                vendorIdentifier = task.id
+            } catch (e: Exception) {
+                ChartboostCoreLogger.e("Exception raised while retrieving AppSet ID: ${e.message}")
             }
         }
-    }
-
-    private suspend fun updateAppSetId(appContext: Context) = withContext(IO) {
-        try {
-            val task = AppSet.getClient(appContext).appSetIdInfo.await()
-            vendorIdentifierScope = when (task.scope) {
-                AppSetIdInfo.SCOPE_DEVELOPER -> VendorIdScope.DEVELOPER
-                AppSetIdInfo.SCOPE_APP -> VendorIdScope.APPLICATION
-                else -> VendorIdScope.UNKNOWN
-            }
-            vendorIdentifier = task.id
-        } catch (e: Exception) {
-            ChartboostCoreLogger.e("Exception raised while retrieving AppSet ID: ${e.message}")
-        }
-    }
 
     private suspend fun advertisingIdClient(): AdvertisingIdClient.Info? {
         return withContext(IO) {
-            appContext?.let { context ->
-                AdvertisingIdClient.getAdvertisingIdInfo(context)
-            } ?: run {
-                ChartboostCoreLogger.e("Application context is not available.")
+            try {
+                appContext?.let { context ->
+                    AdvertisingIdClient.getAdvertisingIdInfo(context)
+                } ?: run {
+                    ChartboostCoreLogger.e("Application context is not available.")
+                    null
+                }
+            } catch (e: GooglePlayServicesNotAvailableException) {
                 null
             }
         }
@@ -369,12 +432,13 @@ internal class Environment() : BaseEnvironment,
                 // NonGooglePlayAdvertisingClient data object.
                 appContext?.contentResolver?.let { contentResolver ->
                     // Settings.Secure.getInt throws an error exception if value is not found.
-                    val lmt: Int = try {
-                        (Settings.Secure.getInt(contentResolver, "limit_ad_tracking"))
-                    } catch (e: Settings.SettingNotFoundException) {
-                        ChartboostCoreLogger.e("Exception raised while retrieving lmt ${e.message}")
-                        return@withContext null
-                    }
+                    val lmt: Int =
+                        try {
+                            (Settings.Secure.getInt(contentResolver, "limit_ad_tracking"))
+                        } catch (e: Settings.SettingNotFoundException) {
+                            ChartboostCoreLogger.e("Exception raised while retrieving lmt ${e.message}")
+                            return@withContext null
+                        }
 
                     // Settings.Secure.getString returns null if not present.
                     Settings.Secure.getString(contentResolver, "advertising_id")?.let { id ->

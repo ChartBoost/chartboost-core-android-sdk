@@ -1,6 +1,6 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
@@ -10,15 +10,21 @@ package com.chartboost.core
 import android.content.Context
 import com.chartboost.core.ChartboostCoreInternal.environment
 import com.chartboost.core.consent.ConsentManagementPlatform
-import com.chartboost.core.environment.*
-import com.chartboost.core.initialization.InitializableModule
-import com.chartboost.core.initialization.InitializableModuleObserver
+import com.chartboost.core.environment.AdvertisingEnvironment
+import com.chartboost.core.environment.AnalyticsEnvironment
+import com.chartboost.core.environment.AttributionEnvironment
+import com.chartboost.core.environment.PublisherMetadata
+import com.chartboost.core.initialization.ModuleFactory
+import com.chartboost.core.initialization.ModuleObserver
 import com.chartboost.core.initialization.SdkConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * The entry point for ChartboostCore.
+ */
 object ChartboostCore {
     /**
      * The Chartboost Core Consent Management Platform.
@@ -34,11 +40,22 @@ object ChartboostCore {
     val sdkVersion: String = Constants.SDK_VERSION
 
     /**
-     * Flag to enable debug mode for Chartboost Core. This will enable verbose logs for the SDK.
+     * The log level. Anything of that log level and lower will be emitted.
+     * Set this to [ChartboostCoreLogLevel.DISABLED] for no logs
      */
     @JvmStatic
-    var debug: Boolean = false
+    var logLevel
+        @JvmStatic
+        get() = ChartboostCoreLogger.logLevel
 
+        @JvmStatic
+        set(value) {
+            ChartboostCoreLogger.logLevel = value
+        }
+
+    /**
+     * Set metadata about the user or app with this class.
+     */
     @JvmStatic
     val publisherMetadata: PublisherMetadata = PublisherMetadata()
 
@@ -64,26 +81,29 @@ object ChartboostCore {
         get() = environment
 
     /**
+     * The mechanism for non-native ChartboostCore Modules to be created by native ChartboostCore.
+     */
+    @JvmStatic
+    internal var nonNativeModuleFactory: ModuleFactory? = null
+
+    /**
      * Initialize the Chartboost Core SDK and its modules for Java implementations.
      *
      * @param context Context to use for initialization.
      * @param sdkConfiguration ChartboostCore configuration to use for initialization.
-     * @param modules Set of modules to initialize.
      * @param observer Observer for module initialization to be notified of each module's result data.
      */
     @JvmStatic
     fun initializeSdkFromJava(
         context: Context,
         sdkConfiguration: SdkConfiguration,
-        modules: List<InitializableModule>,
-        observer: InitializableModuleObserver?,
+        observer: ModuleObserver?,
     ) {
         CoroutineScope(Main).launch {
             initializeSdk(
                 context,
                 sdkConfiguration,
-                modules,
-                observer
+                observer,
             )
         }
     }
@@ -93,7 +113,6 @@ object ChartboostCore {
      *
      * @param context Context to use for initialization.
      * @param sdkConfiguration ChartboostCore configuration to use for initialization.
-     * @param modules Set of modules to initialize.
      * @param observer Observer for module initialization to be notified of each module's result data.
      *
      * @return Result data pertaining to the Chartboost Core SDK initialization itself.
@@ -101,9 +120,8 @@ object ChartboostCore {
     suspend fun initializeSdk(
         context: Context,
         sdkConfiguration: SdkConfiguration,
-        modules: List<InitializableModule>,
-        observer: InitializableModuleObserver?,
+        observer: ModuleObserver?,
     ) = coroutineScope {
-        ChartboostCoreInternal.initializeSdk(context, sdkConfiguration, modules, observer)
+        ChartboostCoreInternal.initializeSdk(context, sdkConfiguration, observer)
     }
 }

@@ -1,19 +1,17 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
 
 package com.example.chartboostcore
 
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.

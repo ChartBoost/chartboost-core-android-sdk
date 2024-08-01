@@ -1,6 +1,6 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
@@ -10,7 +10,8 @@ package com.chartboost.core.consent
 enum class ConsentStatus(val value: String) {
     GRANTED("granted"),
     DENIED("denied"),
-    UNKNOWN("unknown");
+    UNKNOWN("unknown"),
+    ;
 
     override fun toString() = value
 
