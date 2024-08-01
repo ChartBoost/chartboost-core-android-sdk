@@ -1,6 +1,6 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
@@ -12,9 +12,16 @@ import com.chartboost.core.Constants.MAX_RETRY_DELAY_MS
 import com.chartboost.core.Constants.SEED_RETRY_DELAY_MS
 import com.chartboost.core.error.ChartboostCoreError
 import com.chartboost.core.error.ChartboostCoreException
+import com.chartboost.core.network.ChartboostCoreNetworking
+import com.chartboost.core.network.model.AppConfigCombinedResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import org.json.JSONObject
 import kotlin.math.min
 
 /**
@@ -30,9 +37,7 @@ object Utils {
      *
      * @return The result of the action.
      */
-    suspend fun <T> executeWithExponentialBackoff(
-        action: suspend (retryCount: Int) -> Result<T>,
-    ): Result<T> {
+    suspend fun <T> executeWithExponentialBackoff(action: suspend (retryCount: Int) -> Result<T>): Result<T> {
         var currentAttempt = 0
         var delayMs = SEED_RETRY_DELAY_MS
 
@@ -45,7 +50,7 @@ object Utils {
             } catch (e: Exception) {
                 ChartboostCoreLogger.e(
                     "Exception occurred while retrying an action with exponential " +
-                            "backoff in retry attempt $currentAttempt: $e"
+                        "backoff in retry attempt $currentAttempt: $e",
                 )
             }
 
@@ -63,10 +68,15 @@ object Utils {
      * @param dispatcher The dispatcher to use. Main by default.
      * @param block The block of code to execute.
      */
-    fun safeExecute(dispatcher: CoroutineDispatcher = Main, block: suspend () -> Unit) {
-        CoroutineScope(dispatcher).launch(CoroutineExceptionHandler { _, throwable ->
-            ChartboostCoreLogger.e("Error occurred during safe execution: $throwable")
-        }) {
+    fun safeExecute(
+        dispatcher: CoroutineDispatcher = Main,
+        block: suspend () -> Unit,
+    ) {
+        CoroutineScope(dispatcher).launch(
+            CoroutineExceptionHandler { _, throwable ->
+                ChartboostCoreLogger.e("Error occurred during safe execution: $throwable")
+            },
+        ) {
             try {
                 block()
             } catch (e: Exception) {
@@ -76,24 +86,23 @@ object Utils {
     }
 
     /**
-     * A stub function simulating a networking operation to fetch initialization data from backend.
+     * Fetches the Core config from the backend.
      *
-     * @return The result of the operation.
+     * @return The result of the operation which contains an [AppConfigCombinedResponse] or an error.
      */
-    suspend fun fetchInitializationDataFromBackend(): Result<Any> {
+    suspend fun fetchInitializationDataFromBackend(): Result<AppConfigCombinedResponse?> {
         return withContext(IO) {
             try {
-                // Simulate network delay.
-                delay(1000L)
-
-                if (Math.random() < 0.5) {
-                    Result.success(Unit)
-                } else {
-                    Result.failure(ChartboostCoreException(ChartboostCoreError.CoreError.Unknown))
-                }
+                ChartboostCoreNetworking.getCoreConfig()
             } catch (e: Exception) {
                 Result.failure(e)
             }
         }
     }
+
+    /**
+     * Converts a kotlinx JsonObject to a JSONObject.
+     */
+    @Throws(SerializationException::class, IllegalArgumentException::class)
+    fun JsonObject.toJSONObject(): JSONObject = JSONObject(Json.encodeToString(this))
 }

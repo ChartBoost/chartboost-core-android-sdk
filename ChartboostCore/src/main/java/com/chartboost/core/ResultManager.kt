@@ -1,6 +1,6 @@
 /*
- * Copyright 2023 Chartboost, Inc.
- * 
+ * Copyright 2023-2024 Chartboost, Inc.
+ *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
@@ -8,7 +8,7 @@
 package com.chartboost.core
 
 import com.chartboost.core.error.ChartboostCoreException
-import com.chartboost.core.initialization.InitializableModule
+import com.chartboost.core.initialization.Module
 import com.chartboost.core.initialization.ModuleInitializationResult
 import com.chartboost.core.initialization.SdkInitializationResult
 
@@ -19,12 +19,12 @@ internal object ResultManager {
     /**
      * Map of module name to result data for tracking purposes.
      */
-    val resultDataMap = mutableMapOf<InitializableModule, ResultData>()
+    val resultDataMap = mutableMapOf<Module, ResultData>()
 
     /**
      * Start tracking result for a module.
      */
-    fun start(module: InitializableModule) {
+    fun start(module: Module) {
         val resultData = ResultData(module)
         resultData.start()
         resultDataMap[module] = resultData
@@ -34,13 +34,14 @@ internal object ResultManager {
      * Stop tracking result for a module.
      */
     fun stop(
-        module: InitializableModule,
-        exception: ChartboostCoreException? = null
+        module: Module,
+        exception: ChartboostCoreException? = null,
     ): ChartboostCoreResult {
-        val resultData = resultDataMap.getOrElse(module) {
-            ChartboostCoreLogger.e("No result data found for module $module. Creating new one.")
-            ResultData(module)
-        }
+        val resultData =
+            resultDataMap.getOrElse(module) {
+                ChartboostCoreLogger.e("No result data found for module $module. Creating new one.")
+                ResultData(module)
+            }
         resultData.stop(exception)
         return resultData.build()
     }
@@ -50,7 +51,7 @@ internal object ResultManager {
      *
      * @property module The module instance.
      */
-    class ResultData(private val module: InitializableModule) {
+    class ResultData(private val module: Module) {
         private var startTime: Long = System.currentTimeMillis()
         private var endTime: Long? = null
         private var exception: ChartboostCoreException? = null
@@ -90,7 +91,8 @@ internal object ResultManager {
                     end = updatedEndTime,
                     duration = updatedEndTime.minus(startTime),
                     exception = exception,
-                    module = module,
+                    moduleId = module.moduleId,
+                    moduleVersion = module.moduleVersion,
                 )
             }
         }

@@ -1,10 +1,11 @@
-# chartboost-core-android-sdk
+# Android Chartboost Core & Mediation SDKs
 
+![badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fchartboost.s3.amazonaws.com%2Fchartboost-mediation%2Fsdk%2Fandroid%2Fcode-coverage%2Fcoverage-percent.json)
 ![badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fchartboost.s3.amazonaws.com%2Fchartboost-core%2Fsdk%2Fandroid%2Fcode-coverage%2Fcoverage-percent.json)
 
-## Introduction
+The Android Chartboost Mediation SDK, by Chartboost, is a Unified-Auction & Mediated solution which helps developers increase their mobile apps' revenue with the inclusion of other supported Programmatic & Mediated SDKs.
 
-ChartboostCore SDK is a modular Android SDK designed as an entry point to manage and facilitate different modules for your Android application/game. Each module can be individually initialized and has its metrics collected and reported, offering detailed insights into module performance and potential issues.
+Chartboost Core Android SDK is designed as an entry point to manage and facilitate different modules for your Android application/game. Each module can be individually initialized with metrics collected and reported to offer detailed insights into the module’s performance and potential issues.
 
 The main functionalities provided by the SDK are:
 
@@ -13,50 +14,77 @@ The main functionalities provided by the SDK are:
 3. Detailed error tracking and reporting with categorized error codes.
 4. Centralized logging system with multiple log levels and output options.
 
-## Repository Structure
+## Get Started on Android
 
-The main components of the repository are:
+See [Developer Docs](https://developers.chartboost.com) for detailed instructions.
 
-- The `app` directory contains a sample app that demonstrates the usage of ChartboostCore SDK.
-- The `chartboostcore` directory contains the source code for the ChartboostCore SDK.
+----
 
-## Getting Started
+## Before You Begin
 
-To integrate the SDK into your project, you will need to add the following to your app's `build.gradle` file:
+- Have you signed up for a Chartboost Mediation Account?
+- Did you [add an app](https://developers.chartboost.com/docs/import-apps-into-helium) to the Chartboost Mediation Dashboard?
+- Have you [set up Ad Placements](https://developers.chartboost.com/docs/manage-placements) in the Chartboost Mediation Dashboard?
 
-```groovy
+## Minimum Supported Development Tools
+
+| Software       | Version             |
+| :------------- | :------------------ |
+| Android Studio | 2020.3.1+           |
+| Android OS     | 5.0+ (API level 21) |
+
+## Add the Chartboost Core SDK and the Chartboost Mediation SDK to your project
+
+For `build.gradle`
+
+```gradle
+repositories {
+    maven {
+      name "Chartboost Mediation's maven repo"
+      url "https://cboost.jfrog.io/artifactory/chartboost-mediation"
+    }
+    maven {
+      name "Chartboost Core's maven repo"
+      url "https://cboost.jfrog.io/artifactory/chartboost-core"
+    }
+}
+
 dependencies {
-    implementation project(path: ':chartboostcore')
+    implementation("com.chartboost:chartboost-core-sdk:1.0.0")
+    implementation("com.chartboost:chartboost-mediation-sdk:5.0.0")
 }
 ```
 
-Then, you can initialize the SDK in your application as follows. Note that this code snippet is for demonstration purposes only and should not be used in production.
+## Add 3rd-Party Dependencies
 
-```kotlin
-    ChartboostCore.debug = true
-    ChartboostCore.initializeSdk(
-        context,
-        sdkConfiguration,
-        setOf(
-            ModuleAlpha(appId = "alpha_app_id", someOtherId = "alpha_other_id"),
-            ModuleBeta(
-                appId = "beta_app_id",
-                someOtherIds = listOf("beta_other_id_1", "beta_other_id_2")
-            )
-        ), object : InitializableModuleObserver {
-            override fun onModuleInitializationCompleted(result: ModuleInitializationResult) {
-                Log.d("[ChartboostCore]", "Module initialized with result: $result")
-            }
-        }
-    )
+```gradle
+implementation("androidx.lifecycle:lifecycle-common:2.6.2")
+implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
+implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.21")
+implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+implementation("com.squareup.okhttp3:okhttp:4.11.0")
+implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+implementation("com.squareup.retrofit2:retrofit:2.9.0")
 ```
 
-For more detailed information on the usage of the SDK, refer to the app module in this repository.
+## Add Google Play Services
 
-## Contribution
+Add the Google Play Services Library as a dependency of your project. For detailed instructions, reference the official integration instructions for [Google Play Services](https://developers.google.com/android/guides/setup).
 
-See CONTRIBUTING.md
+As opposed to referencing the entire Google Play Services package, you only need `play-services-base`, `play-services-ads-identifier`, and `play-services-appset`:
 
-## License
+```gradle
+implementation 'com.google.android.gms:play-services-base:18.1.0'
+implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+implementation 'com.google.android.gms:play-services-appset:16.0.2'
+```
 
-TBD
+### OPTIONAL STEP: Download the Chartboost Mediation Android Sample App
+
+The Chartboost Mediation Android Sample App is no longer distributed via a package and has been moved to a public GitHub repo.
+
+- [Chartboost Mediation Android SDK Sample App](https://github.com/ChartBoost/android-chartboost-mediation-sdk-example)
