@@ -1,0 +1,101 @@
+<!--
+  Copyright 2025 Chartboost, Inc.
+  
+  Use of this source code is governed by an MIT-style
+  license that can be found in the LICENSE file.
+-->
+
+<resources>
+
+    <string name="app_name">AdPreviewApp</string>
+
+    //Launcher screen
+    <string name="chartboost_logo">Chartboost logo</string>
+
+    //Top app bar
+    <string name="nav_back">Back</string>
+    <string name="settings">Settings</string>
+
+    //Login screen
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="invalid_email">Please enter a valid email address</string>
+    <string name="login_button">Log in</string>
+    <string name="toggle_password_visibility">Toggle password visibility</string>
+    <string name="signup_prompt">Don\'t have an account?</string>
+    <string name="signup_link_text">Sign up here</string>
+    <string name="signup_link_url">https://platform.chartboost.com/signup</string>
+
+    <string name="error_network">No internet connection. Please check your network and try again.</string>
+    <string name="error_wrong_credentials">Wrong email or password.\nForgot your password? \nTap the \'Sign up here\' link to reset it on our website.</string>
+    <string name="error_unknown">Unknown error occurred.</string>
+
+    <string name="privacy_policy_text">Privacy Policy</string>
+    <string name="terms_conditions_text">Terms &amp; Conditions</string>
+    <string name="privacy_policy_url">https://docs.chartboost.com/en/legal/privacy-policy/</string>
+    <string name="terms_conditions_url">https://docs.chartboost.com/en/legal/terms-conditions/</string>
+
+    //Apps list screen
+    <string name="apps_screen_title">Apps</string>
+    <string name="search_apps_label">Search apps</string>
+    <string name="search_icon_description">Search</string>
+    <string name="clear_search_icon_description">Clear search</string>
+    <string name="error_prefix">Error: %1$s</string>
+    <string name="no_apps_found">No apps found. Check your Chartboost dashboard.</string>
+    <string name="unnamed_app">Unnamed (%1$s)</string>
+    <string name="platform_label">Platform: %1$s</string>
+    <string name="bundle_id_label">Bundle ID: %1$s</string>
+    <string name="view_placements_description">View Placements</string>
+
+    //AdLocations screen
+    <string name="ad_locations_default_title">Ad locations</string>
+    <string name="no_locations_found">No locations found for the app</string>
+    <string name="no_app_id_found">Internal error. No appId found</string>
+    <string name="problem_fetching_locations">Problem fetching locations for the app. Close the app and try again</string>
+    <string name="search_ad_locations_label">Search ad locations</string>
+
+    <string name="dialog_restart_title">Restart App?</string>
+    <string name="dialog_restart_message">To test a different app, please restart the AdPreview app.</string>
+    <string name="dialog_force_close_confirm">Force Close</string>
+    <string name="dialog_restart_dismiss">Stay and test</string>
+
+    <string name="ad_location_test_screen_title">Test ad location</string>
+    <string name="ad_location_test_screen_content">Test screen content goes here.</string>
+    <string name="loading_banner_failed">Loading Banner Failed. \n %1$s</string>
+    <string name="internal_app_error_no_location_name">Internal app error. No location name found. Close app and try again</string>
+    <string name="loading_interstitial_failed">Loading fullscreen ad failed</string>
+    <string name="showing_interstitial_failed">Showing fullscreen ad failed</string>
+    <string name="unknown_type_of_ad">Unknown type of ad : %1$s. Cannot proceed</string>
+    <string name="internal_app_problem_no_activity_to_show_ad">Internal app problem. Close app and try again</string>
+    <string name="clear_logs_button">Clear Logs</string>
+
+    <string name="keywords_title">Keywords</string>
+
+    //Settings Screen
+    <string name="settings_title">Settings</string>
+
+    <string name="test_mode_title">Test Mode</string>
+    <string name="test_mode_description">Enabling test mode will fetch test creatives</string>
+    <string name="clear_logs_title">Clear logs on load</string>
+    <string name="clear_logs_description">Clear logs on every ad load</string>
+    <string name="tracking_status_title">Tracking Status</string>
+    <string name="tracking_status_description">Allow tracking for full functionality</string>
+    <string name="tracking_status_granted">Granted</string>
+    <string name="tracking_status_denied">Denied</string>
+    <string name="tracking_status_unknown">Unknown</string>
+    <string name="logout">Log out</string>
+    <string name="switch_test_mode_internal_error_message">Unexpected problem. Cannot set to test mode</string>
+
+
+    <string name="mediation_sdk_version">Mediation SDK version %1$s</string>
+    <string name="monetization_sdk_version">Monetization SDK version %1$s</string>
+
+    <string name="chartboost_sdk_initialized">Chartboost SDK initialized for appId=%1$s (Test Mode: %2$s)</string>
+    <string name="chartboost_sdk_init_failed">SDK initialization failed: %1$s</string>
+    <string name="delete_all_icon_description">Delete All</string>
+
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_note">Account management available via the Chartboost dashboard</string>
+    <string name="delete_account_url">https://platform.chartboost.com/login</string>
+
+</resources>

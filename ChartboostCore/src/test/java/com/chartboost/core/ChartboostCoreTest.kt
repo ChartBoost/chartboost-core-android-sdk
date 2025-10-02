@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Chartboost, Inc.
+ * Copyright 2024-2025 Chartboost, Inc.
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
@@ -11,13 +11,30 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import com.chartboost.core.ChartboostCoreInternal.moduleInitializationStatuses
-import com.chartboost.core.initialization.*
+import com.chartboost.core.initialization.Module
+import com.chartboost.core.initialization.ModuleConfiguration
+import com.chartboost.core.initialization.ModuleInitializationResult
+import com.chartboost.core.initialization.ModuleInitializationStatus
+import com.chartboost.core.initialization.ModuleObserver
+import com.chartboost.core.initialization.SdkConfiguration
 import com.google.android.gms.appset.AppSet
 import com.google.android.gms.appset.AppSetIdClient
 import com.google.android.gms.appset.AppSetIdInfo
 import com.google.android.gms.tasks.Task
-import io.mockk.*
-import kotlinx.coroutines.*
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.slot
+import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -35,7 +52,6 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLooper
-import kotlin.time.Duration.Companion.milliseconds
 
 @RunWith(RobolectricTestRunner::class)
 class ChartboostCoreTest {
@@ -198,7 +214,7 @@ class ChartboostCoreTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `initializing one module sequentially calls onModuleInitializationCompleted n times for n completions`() =
-        runTest(timeout = 60000.milliseconds) {
+        runTest {
             val context = mockk<Context>(relaxed = true)
             val module = TestModule("test_module")
             val sdkConfiguration =

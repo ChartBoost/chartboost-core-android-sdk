@@ -1,90 +1,131 @@
-# Android Chartboost Core & Mediation SDKs
-
 ![badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fchartboost.s3.amazonaws.com%2Fchartboost-mediation%2Fsdk%2Fandroid%2Fcode-coverage%2Fcoverage-percent.json)
 ![badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fchartboost.s3.amazonaws.com%2Fchartboost-core%2Fsdk%2Fandroid%2Fcode-coverage%2Fcoverage-percent.json)
+![badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fchartboost.s3.amazonaws.com%2Fchartboost-monetization%2Fsdk%2Fandroid%2Fcode-coverage%2Fcoverage-percent.json)
 
-The Android Chartboost Mediation SDK, by Chartboost, is a Unified-Auction & Mediated solution which helps developers increase their mobile apps' revenue with the inclusion of other supported Programmatic & Mediated SDKs.
+# Chartboost Android SDKs
 
-Chartboost Core Android SDK is designed as an entry point to manage and facilitate different modules for your Android application/game. Each module can be individually initialized with metrics collected and reported to offer detailed insights into the module’s performance and potential issues.
+This repository contains the source code for the Chartboost Android SDKs, including the Core, Mediation, and Monetization products. This guide is intended for internal developers and provides information on building, testing, and releasing the SDKs.
 
-The main functionalities provided by the SDK are:
+## Repository Structure
 
-1. Initialization of individual or a set of modules.
-2. Performance metrics collection during the module initialization process.
-3. Detailed error tracking and reporting with categorized error codes.
-4. Centralized logging system with multiple log levels and output options.
+The repository is a multi-module monorepository. The main components are:
 
-## Get Started on Android
+| Module / Directory                  | Description                                                                                                                              |
+| ----------------------------------- |------------------------------------------------------------------------------------------------------------------------------------------|
+| `ChartboostCore/`                   | The Core SDK, providing common functionalities like networking, logging, and module management used by other Chartboost SDKs.            |
+| `ChartboostMediation/`              | The Chartboost Mediation SDK, which integrates multiple ad network partners.                                                             |
+| `ChartboostMonetization/`           | The Chartboost Monetization SDK.                                                                                                         |
+| `ChartboostMediationCanary/`        | An internal testing application for the Mediation SDK, used for development, QA, and canary releases.                                    |
+| `ChartboostCoreJavaValidator/`      | A small project to ensure the Core SDK has proper Java interoperability.                                                                 |
+| `ChartboostMediationJavaValidator/` | A small project to ensure the Mediation SDK has proper Java interoperability.                                                            |
+| `chartboost-mediation-android-adapter-*` | Git submodules for each third-party mediation adapter (e.g., AdMob, AppLovin). These are separate repositories.                          |
+| `chartboost-core-android-consent-adapter-*` | Git submodules for consent management platform adapters (e.g., Usercentrics, Google UMP).                                                |
+| `buildSrc/`                         | Contains build logic, dependencies, and version information shared across modules.                                                       |
+| `scripts/`                          | Contains various scripts for CI/CD, releasing, and other automation tasks.                                                               |
+| `.github/workflows/`                | GitHub Actions workflows for CI, nightly builds, releases, etc.                                                                          |
 
-See [Developer Docs](https://developers.chartboost.com) for detailed instructions.
+## Getting Started
 
-----
+### Prerequisites
 
-## Before You Begin
+1.  **Android Studio:** Use the version specified in the root `build.gradle.kts`.
+2.  **Java Development Kit (JDK):** Ensure you have JDK 17 installed.
+3.  **Artifactory Credentials:** To build the project, you need credentials for Chartboost's Artifactory instance. They can be found in the team's 1Password vault. Set the following environment variables:
+    ```bash
+    export JFROG_USER="<artifactory-username>"
+    export JFROG_PASS="<artifactory-password>"
+    ```
+4.  **Git Submodules:** The adapter dependencies are managed as git submodules. After cloning the repository, you must initialize and update the submodules:
+    ```bash
+    git submodule update --init --recursive
+    ```
+    To pull the latest changes for all submodules, run:
+    ```bash
+    git submodule foreach git pull origin main
+    ```
 
-- Have you signed up for a Chartboost Mediation Account?
-- Did you [add an app](https://developers.chartboost.com/docs/import-apps-into-helium) to the Chartboost Mediation Dashboard?
-- Have you [set up Ad Placements](https://developers.chartboost.com/docs/manage-placements) in the Chartboost Mediation Dashboard?
+### Building the Source
 
-## Minimum Supported Development Tools
+You can build the entire project and all its modules by running the following command from the root directory:
 
-| Software       | Version             |
-| :------------- | :------------------ |
-| Android Studio | 2020.3.1+           |
-| Android OS     | 5.0+ (API level 21) |
-
-## Add the Chartboost Core SDK and the Chartboost Mediation SDK to your project
-
-For `build.gradle`
-
-```gradle
-repositories {
-    maven {
-      name "Chartboost Mediation's maven repo"
-      url "https://cboost.jfrog.io/artifactory/chartboost-mediation"
-    }
-    maven {
-      name "Chartboost Core's maven repo"
-      url "https://cboost.jfrog.io/artifactory/chartboost-core"
-    }
-}
-
-dependencies {
-    implementation("com.chartboost:chartboost-core-sdk:1.0.0")
-    implementation("com.chartboost:chartboost-mediation-sdk:5.0.0")
-}
+```bash
+./gradlew build
 ```
 
-## Add 3rd-Party Dependencies
+To build a specific module, you can run the `build` task for that module. For example, to build the Mediation SDK:
 
-```gradle
-implementation("androidx.lifecycle:lifecycle-common:2.6.2")
-implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
-implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.21")
-implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
-implementation("com.squareup.okhttp3:okhttp:4.11.0")
-implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
-implementation("com.squareup.retrofit2:retrofit:2.9.0")
+```bash
+./gradlew :ChartboostMediation:build
 ```
 
-## Add Google Play Services
+### Running the Canary App
 
-Add the Google Play Services Library as a dependency of your project. For detailed instructions, reference the official integration instructions for [Google Play Services](https://developers.google.com/android/guides/setup).
+The `ChartboostMediationCanary` app is the primary tool for testing and debugging the SDKs. To run it:
 
-As opposed to referencing the entire Google Play Services package, you only need `play-services-base`, `play-services-ads-identifier`, and `play-services-appset`:
+1.  Open the project root in Android Studio.
+2.  Select the `ChartboostMediationCanary` run configuration.
+3.  Choose an emulator or connected device.
+4.  Click "Run".
 
-```gradle
-implementation 'com.google.android.gms:play-services-base:18.1.0'
-implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-implementation 'com.google.android.gms:play-services-appset:16.0.2'
-```
+## Development Workflow & CI
 
-### OPTIONAL STEP: Download the Chartboost Mediation Android Sample App
+The CI process is handled by GitHub Actions. The main workflow is defined in `ci-tests.yml`. It runs on every pull request (see below for details).
 
-The Chartboost Mediation Android Sample App is no longer distributed via a package and has been moved to a public GitHub repo.
+### Local CI Checks
 
-- [Chartboost Mediation Android SDK Sample App](https://github.com/ChartBoost/android-chartboost-mediation-sdk-example)
+Before pushing your changes, you should run the same high-level CI tasks that are used in GitHub Actions. These tasks lint, test, and build the main SDKs.
+
+-   For Core SDK changes: `./gradlew chartboostcore-ci`
+-   For Mediation SDK changes: `./gradlew chartboostmediation-ci`
+-   For Monetization SDK changes: `./gradlew chartboostmonetization-ci`
+
+### Pull Request CI
+
+When you open a pull request, the `ci-tests.yml` workflow will automatically run. It performs the following steps:
+
+1.  **Determines Changed Modules:** It intelligently inspects the changed files to determine which SDK modules are affected (Core, Mediation, Monetization).
+2.  **Automated Fixes:** It automatically checks for and adds missing copyright headers. It also runs `ktlint` and `black` to format Kotlin and Python code. Any changes are automatically committed and pushed to your PR branch.
+3.  **Static Analysis:** It runs `detekt` on the changed Kotlin files and posts a report as a comment on the PR. This comment is updated on subsequent pushes.
+4.  **Build & Test:** It runs the appropriate `*-ci` Gradle task (e.g., `chartboostmediation-ci`) for the modules that were changed. This ensures the code builds and all tests pass.
+
+## Releasing
+
+The release process is highly automated through GitHub Actions. **Do not create and push tags manually.** The entire process is managed by a script to ensure consistency and safety.
+
+### How to Create a Release
+
+The release process is initiated through the **Manual Release** (odd name, we know) workflow in the GitHub Actions tab.
+
+1.  **Navigate to the Actions tab** in the GitHub repository.
+2.  Select the **Manual Release** workflow from the list on the left.
+3.  Click the **Run workflow** dropdown button.
+4.  **Fill in the required parameters:**
+    *   **`version`**: The version to release in `MAJOR.MINOR.PATCH` format (e.g., `5.3.0`).
+    *   **`sdk_module`**: The SDK module to release (choose from `ChartboostCore`, `ChartboostMediation`, or `ChartboostMonetization`).
+    *   **`dry_run`**: Select `true` to run a test release or `false` for a production release.
+5.  Click the **Run workflow** button.
+
+### The Release Automation Flow
+
+Here is what happens after you trigger the manual release:
+
+1.  **`manual-release.yml` is triggered:** This workflow takes your inputs.
+2.  **`scripts/release.sh` is executed:** The workflow calls this shell script, passing your inputs as parameters. The script checks out the correct release branch (e.g., `release/5.3.0-ChartboostMediation`), then creates and pushes the corresponding git tag (e.g., `5.3.0-ChartboostMediation` or `5.3.0-ChartboostMediation-dryrun`).
+3.  **`release.yml` is triggered:** The push of the new tag automatically triggers the main `release.yml` workflow. This workflow is responsible for the actual release process:
+    *   It runs precondition checks.
+    *   It builds the AAR and publishes it to Artifactory.
+    *   It creates a GitHub Release with the AAR as an artifact.
+    *   It automatically creates PRs to merge the release branch back into `develop` and `main`.
+    *   It publishes the documentation to S3.
+    *   It syncs the code to the public open-source repository (for Core and Mediation).
+
+### Dry Run Releases
+
+It is highly recommended to perform a **dry run** before a production release. To do this, simply set the `dry_run` input parameter to `true` when running the **Manual Release** workflow.
+
+The dry run will execute all the same steps as a real release, but it will not publish to the public Artifactory repositories. It will create a temporary GitHub release and PRs, and then automatically delete them at the end of the workflow. This allows you to safely verify that the entire release process is working correctly.
+
+### Nightly Builds and Release Candidates
+
+-   **Nightly Builds:** The `nightly.yml` workflow runs daily, building the latest `develop` branch and publishing it to a private Artifactory repository.
+-   **Release Candidates:** The `generate-release-candidate.yml` workflow can be run manually to create and publish a release candidate for testing.

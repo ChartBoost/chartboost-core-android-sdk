@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Chartboost, Inc.
+ * Copyright 2023-2025 Chartboost, Inc.
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
@@ -16,6 +16,7 @@ plugins {
     id("com.jfrog.artifactory") version "4.32.0"
     id("maven-publish")
 
+    id("com.google.dagger.hilt.android") version "2.51" apply false
 }
 
 fun getShortGitCommitHash(): String {
@@ -34,6 +35,7 @@ buildscript {
         gradlePluginPortal()
         google()
         mavenCentral()
+        gradlePluginPortal()
 
         maven("https://cboost.jfrog.io/artifactory/private-chartboost-core/") {
             credentials {
@@ -56,9 +58,11 @@ buildscript {
         classpath("org.jfrog.buildinfo:build-info-extractor-gradle:4.32.0")
         classpath("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.38.1")
 
     }
 }
+
 
 
 

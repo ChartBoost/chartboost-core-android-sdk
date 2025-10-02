@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "983003802362",
+    "firebase_url": "https://helium-sdk-default-rtdb.firebaseio.com",
+    "project_id": "helium-sdk",
+    "storage_bucket": "helium-sdk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983003802362:android:f45c4b35989ffa15837743",
+        "android_client_info": {
+          "package_name": "com.chartboost.adpreviewapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBthIOsQ04gZtIIkgggNqbwQt77dYHsAxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,16 +1,24 @@
 /*
- * Copyright 2023-2024 Chartboost, Inc.
+ * Copyright 2023-2025 Chartboost, Inc.
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file.
  */
 
 include(
+    // AdPreview App
+    ":AdPreviewApp",
+    // Mediation SDK
     ":ChartboostMediation",
     ":ChartboostMediationCanary",
     ":ChartboostMediationJavaValidator",
+    // Core SDK
     ":ChartboostCore",
     ":ChartboostCoreJavaValidator",
+    // Ads SDK
+    ":ChartboostMonetization",
+    ":ChartboostMonetizationKotlinValidator",
+    // Mediation Adapters
     ":GoogleUserMessagingPlatformAdapter",
     ":UsercentricsAdapter",
     ":AdMobAdapter",
