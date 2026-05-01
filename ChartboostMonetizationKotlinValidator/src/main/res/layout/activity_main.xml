@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright 2025 Chartboost, Inc.
+  
+  Use of this source code is governed by an MIT-style
+  license that can be found in the LICENSE file.
+-->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/load_banner_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Banner"
+        android:contentDescription="load_banner_button"
+        app:layout_constraintBottom_toTopOf="@+id/load_interstitial_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/load_interstitial_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Interstitial"
+        android:contentDescription="load_interstitial_button"
+        app:layout_constraintBottom_toTopOf="@+id/show_interstitial_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/load_banner_button" />
+
+    <Button
+        android:id="@+id/show_interstitial_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Interstitial"
+        android:contentDescription="show_interstitial_button"
+        app:layout_constraintBottom_toTopOf="@+id/load_rewarded_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/load_interstitial_button" />
+
+    <Button
+        android:id="@+id/load_rewarded_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Rewarded"
+        android:contentDescription="load_rewarded_button"
+        app:layout_constraintBottom_toTopOf="@+id/show_rewarded_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/show_interstitial_button" />
+
+    <Button
+        android:id="@+id/show_rewarded_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Rewarded"
+        android:contentDescription="show_rewarded_button"
+        app:layout_constraintBottom_toTopOf="@+id/banner_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/load_rewarded_button" />
+
+    <FrameLayout
+        android:id="@+id/banner_container"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:contentDescription="banner_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/show_rewarded_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

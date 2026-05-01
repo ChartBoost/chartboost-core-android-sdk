@@ -1,0 +1,122 @@
+#!/bin/bash
+# Pre-commit hook for Helium Android project
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo "🔍 Running pre-commit checks..."
+
+# Get staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+KOTLIN_FILES=$(echo "$STAGED_FILES" | grep '\.kt$' || true)
+JAVA_FILES=$(echo "$STAGED_FILES" | grep '\.java$' || true)
+CODE_FILES="$KOTLIN_FILES $JAVA_FILES"
+
+# Flag to track if any critical check fails
+FAILED=0
+
+# 1. Check and fix Kotlin formatting with ktlint
+if [ -n "$KOTLIN_FILES" ]; then
+    echo -n "Checking Kotlin formatting (ktlint)... "
+
+    # Check if ktlint is available
+    if command -v ktlint >/dev/null 2>&1; then
+        # Run ktlint on staged Kotlin files
+        KTLINT_FIXED=""
+        KTLINT_FAILED=""
+
+        for file in $KOTLIN_FILES; do
+            if [ -f "$file" ]; then
+                # First check if file needs formatting (without fixing)
+                if ! ktlint "$file" >/dev/null 2>&1; then
+                    # Try to auto-format
+                    if ktlint -F "$file" >/dev/null 2>&1; then
+                        # File was formatted successfully, need to re-stage it
+                        git add "$file"
+                        KTLINT_FIXED="$KTLINT_FIXED\n  - $file"
+                    else
+                        # Formatting failed or couldn't fix all issues
+                        KTLINT_FAILED="$KTLINT_FAILED\n  - $file"
+                    fi
+                fi
+            fi
+        done
+
+        if [ -n "$KTLINT_FIXED" ]; then
+            echo -e "${YELLOW}⚠${NC}"
+            echo -e "  Auto-formatted and re-staged:$KTLINT_FIXED"
+        elif [ -n "$KTLINT_FAILED" ]; then
+            echo -e "${RED}✗${NC}"
+            echo -e "  Format issues that couldn't be auto-fixed:$KTLINT_FAILED"
+            echo "  Run 'ktlint' to see details"
+            FAILED=1
+        else
+            echo -e "${GREEN}✓${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠${NC}"
+        echo "  ktlint not found. Install with: brew install ktlint"
+    fi
+fi
+
+# 2. Check and update copyright headers
+if [ -n "$CODE_FILES" ]; then
+    echo -n "Checking copyright headers... "
+
+    # Check if Python is available
+    if command -v python3 >/dev/null 2>&1; then
+        # Create a temporary file with the list of staged files
+        TEMP_FILE=$(mktemp)
+        for file in $CODE_FILES; do
+            echo "$file" >> "$TEMP_FILE"
+        done
+
+        # Run copyright script on current directory
+        COPYRIGHT_OUTPUT=$(python3 scripts/copyright.py --path="." 2>&1)
+        COPYRIGHT_RESULT=$?
+
+        # Check if any of our staged files were modified
+        MODIFIED_FILES=""
+        for file in $CODE_FILES; do
+            if git diff --name-only "$file" | grep -q "$file"; then
+                # File was modified by copyright script
+                git add "$file"
+                MODIFIED_FILES="$MODIFIED_FILES\n  - $file"
+            fi
+        done
+
+        rm "$TEMP_FILE"
+
+        if [ -n "$MODIFIED_FILES" ]; then
+            echo -e "${YELLOW}⚠${NC}"
+            echo -e "  Updated copyright headers and re-staged:$MODIFIED_FILES"
+        elif [ $COPYRIGHT_RESULT -ne 0 ]; then
+            echo -e "${RED}✗${NC}"
+            echo "  Copyright script failed. Check scripts/copyright.py"
+            FAILED=1
+        else
+            echo -e "${GREEN}✓${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠${NC}"
+        echo "  Python3 not found. Cannot check copyright headers."
+    fi
+fi
+
+echo ""
+
+# Final result
+if [ $FAILED -eq 1 ]; then
+    echo -e "${RED}✗ Pre-commit checks failed.${NC}"
+    echo "Please fix the issues above before committing."
+    echo "To bypass (not recommended): git commit --no-verify"
+    exit 1
+else
+    echo -e "${GREEN}✅ All pre-commit checks passed!${NC}"
+    exit 0
+fi

@@ -1,6 +1,10 @@
 Android Change Log
 ==================
 
+### Version 1.1.0 *(2025-10-02)*
+Improvements:
+- Bug fixes and improvements.
+
 ### Version 1.0.0 *(2024-08-01)*
 Improvements:
 - Initialization now takes an `SdkConfiguration` object and an optional `ModuleObserver`.
