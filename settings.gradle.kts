@@ -6,8 +6,6 @@
  */
 
 include(
-    // AdPreview App
-    ":AdPreviewApp",
     // Mediation SDK
     ":ChartboostMediation",
     ":ChartboostMediationCanary",
@@ -17,7 +15,6 @@ include(
     ":ChartboostCoreJavaValidator",
     // Ads SDK
     ":ChartboostMonetization",
-    ":ChartboostMonetizationKotlinValidator",
     // Mediation Adapters
     ":GoogleUserMessagingPlatformAdapter",
     ":UsercentricsAdapter",
