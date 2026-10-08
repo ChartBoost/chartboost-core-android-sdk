@@ -1,8 +1,19 @@
 Android Change Log
 ==================
 
-### Version 0.4.0 *(2023-12-7)*
-Improvements
+### Version 1.1.0 *(2025-10-02)*
+Improvements:
+- Bug fixes and improvements.
+
+### Version 1.0.0 *(2024-08-01)*
+Improvements:
+- Initialization now takes an `SdkConfiguration` object and an optional `ModuleObserver`.
+- Renamed `ConsentKeys` and `ConsentValues` and changed them to a list of constants instead of an enum for ease of use.
+- Added automatic shared preference getter for IAB defaults to `ConsentAdapter`.
+- See the [documentation](https://docs.chartboost.com/en/mediation/integrate/core/android/get-started/) for more information.
+
+### Version 0.4.0 *(2023-12-07)*
+Improvements:
 - Added `partnerConsentStatus: Map<String, ConsentStatus>` to `ConsentManagementPlatform. This is to facilitate per-partner consent for Mediation.
 - Added `fun onPartnerConsentStatusChange(partnerId: String, status: ConsentStatus)` to `ConsentObserver`.
 - Added ability for Core to automatically subscribe `PublisherMetadataObserver` modules.
